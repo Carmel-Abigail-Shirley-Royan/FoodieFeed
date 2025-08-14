@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>FoodieFeed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="/cutlery.png">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 4px;
+        }
+
+        .star {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #d1d5db;
+            transition: color .15s;
+        }
+
+        .star.filled {
+            color: #fbbf24;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 1rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-orange-50 to-red-50 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow-lg border-b-4 border-orange-400">
+        <div class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="text-3xl">🍽️</div>
+                <h1 class="text-3xl font-bold text-gray-800">FoodieFeed</h1>
+            </div>
+            <button id="btnAddRecipe"
+                class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg">+
+                Add Recipe</button>
+        </div>
+    </header>
+
+    <!-- Category Filter -->
+    <div class="max-w-6xl mx-auto px-4 py-6">
+        <div class="flex flex-wrap gap-3 justify-center">
+            <button class="filter-btn active bg-orange-500 text-white px-6 py-2 rounded-full font-medium"
+                data-cat="all">All Recipes</button>
+            <button
+                class="filter-btn bg-white hover:bg-orange-100 text-gray-700 px-6 py-2 rounded-full font-medium border-2 border-orange-200"
+                data-cat="dessert">🍰 Desserts</button>
+            <button
+                class="filter-btn bg-white hover:bg-orange-100 text-gray-700 px-6 py-2 rounded-full font-medium border-2 border-orange-200"
+                data-cat="main-course">🍖 Main Course</button>
+            <button
+                class="filter-btn bg-white hover:bg-orange-100 text-gray-700 px-6 py-2 rounded-full font-medium border-2 border-orange-200"
+                data-cat="snacks">🥨 Snacks</button>
+        </div>
+    </div>
+
+    <!-- Recipe Grid -->
+    <main class="max-w-6xl mx-auto px-4 pb-12">
+        <div id="recipeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </main>
+
+    <!-- Add Recipe Modal (hidden by default) -->
+    
+    <!-- Recipe detail modal -->
+    <div id="recipeDetailModal" class="hidden">
+        <div class="modal-backdrop">
+            <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                <div id="recipeDetailContent" class="p-6">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addEditRecipeModal" class="hidden"> 
+            <div class="modal-backdrop">
+                <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 id="modalTitle" class="text-2xl font-bold text-gray-800">Share Your Recipe</h2> 
+                                <button id="closeAddEditModal"
+                                    class="text-gray-500 hover:text-gray-700 text-2xl">×</button> 
+                        </div>
+
+                        <form id="recipeForm" class="space-y-6">
+                            <div>
+                                <label for="recipeTitle" class="block text-sm font-semibold text-gray-700 mb-2">Recipe
+                                    Title</label>
+                                <input type="text" id="recipeTitle" name="recipeTitle" required
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-400 focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label for="recipeCategory"
+                                    class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                                <select id="recipeCategory" name="recipeCategory" required
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-400 focus:outline-none">
+                                    <option value="">Select a category</option>
+                                    <option value="dessert">🍰 Dessert</option>
+                                    <option value="main-course">🍖 Main Course</option>
+                                    <option value="snacks">🥨 Snacks</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="cookingTime" class="block text-sm font-semibold text-gray-700 mb-2">Cooking
+                                    Time (minutes)</label>
+                                <input type="number" id="cookingTime" name="cookingTime" required min="1"
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-400 focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label for="recipeImage" class="block text-sm font-semibold text-gray-700 mb-2">Recipe
+                                    Image (optional - only select to update)</label>
+                                <input type="file" id="recipeImage" name="recipeImage" accept="image/*"
+                                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100">
+                                <img id="currentRecipeImage" src="" alt="Current Recipe Image"
+                                    class="w-full h-48 object-cover mt-2 hidden">
+                            </div>
+
+                            <div>
+                                <label for="ingredientsList"
+                                    class="block text-sm font-semibold text-gray-700 mb-2">Ingredients</label>
+                                <div id="ingredientsList" name="ingredientsList" class="space-y-2 mb-3">
+                                </div>
+                                <button type="button" id="addIngredientBtn"
+                                    class="text-orange-500 hover:text-orange-600 font-medium">+ Add Another
+                                    Ingredient</button>
+                            </div>
+
+                            <div>
+                                <label for="stepsList" class="block text-sm font-semibold text-gray-700 mb-2">Cooking
+                                    Steps</label>
+                                <div id="stepsList" name="stepsList" class="space-y-2 mb-3">
+                                </div>
+                                <button type="button" id="addStepBtn"
+                                    class="text-orange-500 hover:text-orange-600 font-medium">+ Add Another
+                                    Step</button>
+                            </div>
+
+                            <div class="flex gap-4 pt-4">
+                                <button type="button" id="cancelAddEdit"
+                                    class="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-semibold">Cancel</button>
+                                <button type="submit"
+                                    class="flex-1 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold">Save
+                                    Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <script src="script.js">
+
+    </script>
+</body>
+
+</html>
