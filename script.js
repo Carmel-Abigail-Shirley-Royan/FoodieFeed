@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE_URL = 'http://localhost:5000';
+    const API_BASE_URL = 'https://foodiefeedapi.onrender.com';
 
     // Get elements from the DOM
     const recipeGrid = document.getElementById('recipeGrid');
