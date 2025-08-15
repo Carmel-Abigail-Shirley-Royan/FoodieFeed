@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const recipeCard = document.createElement('div');
             recipeCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer transform hover:scale-105 transition-transform duration-300';
             recipeCard.innerHTML = `
-                <img src="${API_BASE_URL}${r.imageUrl}" alt="${r.title}" class="w-full h-48 object-cover">
+                <img src="${r.imageUrl}" alt="${r.title}" class="w-full h-48 object-cover">
                 <div class="p-5">
                     <h3 class="text-xl font-bold text-gray-800 mb-2">${r.title}</h3>
                     <p class="text-gray-600 mb-3">Time: ${r.cookingTime} mins</p>
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button id="closeDetailModal" class="text-gray-500 hover:text-gray-700 text-3xl leading-none">&times;</button>
                     </div>
                 </div>
-                <img src="${API_BASE_URL}${r.imageUrl}" alt="${r.title}" class="w-full h-64 object-cover rounded-lg mb-4">
+                <img src="${r.imageUrl}" alt="${r.title}" class="w-full h-64 object-cover rounded-lg mb-4">
                 <div class="flex items-center justify-between text-gray-600 mb-6">
                     <span><strong>Category:</strong> ${r.category}</span>
                     <span><strong>Cooking Time:</strong> ${r.cookingTime} mins</span>
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('recipeCategory').value = recipe.category;
         document.getElementById('cookingTime').value = recipe.cookingTime;
 
-        currentRecipeImage.src = `${API_BASE_URL}${recipe.imageUrl}`;
+        currentRecipeImage.src = `${recipe.imageUrl}`;
         currentRecipeImage.classList.remove('hidden');
 
         ingredientsList.innerHTML = '';
