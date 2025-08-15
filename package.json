@@ -11,7 +11,8 @@
   "license": "ISC",
   "type": "commonjs",
   "description": "",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
