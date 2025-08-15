@@ -10,14 +10,20 @@ const {
  updateRecipe // Import the new controller
 } = require('../controllers/recipeController');
 
-// Configure Multer for file storage (same as before)
-const storage = multer.diskStorage({
- destination: function (req, file, cb) {
-   cb(null, 'backend/uploads/');
- },
- filename: function (req, file, cb) {
-   cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
- }
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Configure Multer to use Cloudinary for storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'foodiefeed', // A folder name in your Cloudinary account
+    allowed_formats: ['jpeg', 'png', 'jpg'],
+  },
 });
 
 const upload = multer({ storage: storage });
