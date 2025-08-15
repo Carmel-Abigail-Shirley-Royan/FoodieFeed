@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs'); // Import the file system module
+const cloudinary = require('cloudinary').v2;
 const {
  createRecipe,
  getAllRecipes,
