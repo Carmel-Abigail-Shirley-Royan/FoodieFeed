@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.filter-btn.active')?.classList.add('bg-white', 'hover:bg-orange-100', 'text-gray-700', 'border-2', 'border-orange-200');
             
             btn.classList.add('active', 'bg-orange-500', 'text-white');
-            btn.classList.remove('bg-white', 'hover:bg-orange-100', 'text-gray-700', 'border-2', 'border-orange-200');
+            btn.classList.remove('bg-white', 'hover:bg-orange-100', 'text-gray-700');
 
             const category = btn.getAttribute('data-cat');
             const filteredRecipes = category === 'all' ? allRecipes : allRecipes.filter(r => r.category === category);
