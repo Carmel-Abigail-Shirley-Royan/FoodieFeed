@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="flex items-center">
                         <button id="editRecipeBtn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full font-semibold shadow-md mr-3 text-sm">Edit</button>
                         <button id="deleteRecipeBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full font-semibold shadow-md text-sm">Delete</button>
-                        <button id="closeDetailModal" class="text-gray-500 hover:text-gray-700 text-3xl leading-none">&times;</button>
+                        <button id="closeDetailModal" class="text-gray-500 hover:text-gray-700 text-3xl ml-3 leading-none">&times;</button>
                     </div>
                 </div>
                 <img src="${r.imageUrl}" alt="${r.title}" class="w-full h-64 object-cover rounded-lg mb-4">
