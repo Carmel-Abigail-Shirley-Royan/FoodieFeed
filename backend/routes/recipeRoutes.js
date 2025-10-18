@@ -9,7 +9,8 @@ const {
  createRecipe,
  getAllRecipes,
  getRecipeById,
- updateRecipe // Import the new controller
+ updateRecipe,
+ deleteRecipe // Import the new controller
 } = require('../controllers/recipeController');
 
 // Configure Cloudinary
@@ -35,5 +36,6 @@ router.post('/', upload.single('recipeImage'), createRecipe);
 router.get('/', getAllRecipes);
 router.get('/:id', getRecipeById);
 router.put('/:id', upload.single('recipeImage'), updateRecipe); // New update route
+router.delete('/:id', deleteRecipe); 
 
 module.exports = router;

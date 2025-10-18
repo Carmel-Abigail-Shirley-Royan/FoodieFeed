@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h2 class="text-3xl font-bold text-gray-800 mb-4">${r.title}</h2>
                     <div class="flex items-center">
                         <button id="editRecipeBtn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full font-semibold shadow-md mr-3 text-sm">Edit</button>
+                        <button id="deleteRecipeBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full font-semibold shadow-md text-sm">Delete</button>
                         <button id="closeDetailModal" class="text-gray-500 hover:text-gray-700 text-3xl leading-none">&times;</button>
                     </div>
                 </div>
@@ -86,12 +87,40 @@ document.addEventListener('DOMContentLoaded', () => {
             recipeDetailModal.classList.remove('hidden');
             document.getElementById('closeDetailModal').addEventListener('click', () => recipeDetailModal.classList.add('hidden'));
             document.getElementById('editRecipeBtn').addEventListener('click', () => openEditModal(r));
+
+            const deleteBtn = document.getElementById('deleteRecipeBtn');
+            deleteBtn.addEventListener('click', async () => {
+                // Ask for confirmation before deleting
+                if (confirm('Are you sure you want to delete this recipe?')) {
+                    try {
+                        const res = await fetch(`${API_BASE_URL}/api/recipes/${recipeId}`, {
+                            method: 'DELETE',
+                        });
+
+                        if (!res.ok) {
+                            throw new Error('Failed to delete recipe.');
+                        }
+
+                        // Close the modal
+                        recipeDetailModal.classList.add('hidden');
+
+                        // Refresh the recipe grid to show the recipe has been removed
+                        await fetchAllRecipes();
+
+                        alert('Recipe deleted successfully!');
+
+                    } catch (error) {
+                        console.error('Error deleting recipe:', error);
+                        alert('Error: ' + error.message);
+                    }
+                }
+            });
         } catch (error) {
             console.error('Failed to fetch recipe details:', error);
             alert('Could not load recipe details.');
         }
     };
-    
+
     // --- HELPER FUNCTIONS for ADD/EDIT MODAL ---
     const addIngredientInput = (value = '') => {
         const input = document.createElement('input');
@@ -173,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('title', document.getElementById('recipeTitle').value);
         formData.append('category', document.getElementById('recipeCategory').value);
         formData.append('cookingTime', document.getElementById('cookingTime').value);
-        
+
         const imageInput = document.getElementById('recipeImage');
         if (imageInput.files[0]) {
             formData.append('recipeImage', imageInput.files[0]);
@@ -199,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             addEditRecipeModal.classList.add('hidden');
-            await fetchAllRecipes(); 
+            await fetchAllRecipes();
             if (isEditing) {
                 await showRecipeDetail(currentEditingRecipeId);
             }
@@ -209,13 +238,13 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Error: ' + error.message);
         }
     });
-    
+
     // Category Filtering
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelector('.filter-btn.active')?.classList.remove('active', 'bg-orange-500', 'text-white');
             document.querySelector('.filter-btn.active')?.classList.add('bg-white', 'hover:bg-orange-100', 'text-gray-700', 'border-2', 'border-orange-200');
-            
+
             btn.classList.add('active', 'bg-orange-500', 'text-white');
             btn.classList.remove('bg-white', 'hover:bg-orange-100', 'text-gray-700');
 
@@ -224,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderRecipes(filteredRecipes);
         });
     });
-    
+
     // --- INITIALIZATION ---
     fetchAllRecipes();
 });
